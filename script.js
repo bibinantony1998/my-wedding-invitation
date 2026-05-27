@@ -2,6 +2,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const bookContainer = document.querySelector('.book-container');
     const bookEl = document.getElementById('book');
     
+    // Mobile tweak: Strip hard page density so covers fold like normal paper and don't slide
+    if (window.innerWidth <= 600) {
+        document.querySelectorAll('.my-page[data-density="hard"]').forEach(page => {
+            page.removeAttribute('data-density');
+        });
+    }
+    
     // Audio Initialization
     const bgMusic = document.getElementById('bgMusic');
     const flipSound = document.getElementById('flipSound');
@@ -282,4 +289,34 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCountdown();
         setInterval(updateCountdown, 1000);
     }
+
+    // 5. Global Horizontal Swipe Handler (Allows swiping from anywhere, not just corners)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    bookContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    bookContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        touchEndY = e.changedTouches[0].screenY;
+        
+        const xDiff = touchEndX - touchStartX;
+        const yDiff = touchEndY - touchStartY;
+        
+        // If the swipe was mostly horizontal and long enough (50px)
+        if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 40) {
+            if (xDiff < 0) {
+                // Swiped Left (Next Page)
+                pageFlip.flipNext();
+            } else {
+                // Swiped Right (Previous Page)
+                pageFlip.flipPrev();
+            }
+        }
+    }, { passive: true });
 });

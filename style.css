@@ -75,12 +75,12 @@ body {
 .corner-bl { bottom: 15px; left: 15px; width: 130px; }
 .corner-br { bottom: 20px; right: 15px; width: 110px; }
 
-/* Smoothly animate book position to center the cover */
-#book {
-    transition: transform 0.8s ease;
-}
-
 @media (min-width: 601px) {
+    /* Smoothly animate book position to center the cover */
+    #book {
+        transition: transform 0.8s ease;
+    }
+
     /* Center the front cover (shifts the book left by half a page width) */
     .book-container.is-cover #book {
         transform: translateX(-25%);
