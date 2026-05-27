@@ -290,33 +290,54 @@ document.addEventListener('DOMContentLoaded', function() {
         setInterval(updateCountdown, 1000);
     }
 
-    // 5. Global Horizontal Swipe Handler (Allows swiping from anywhere, not just corners)
+    // 5. Global Horizontal Swipe Handler (Instant trigger on move)
     let touchStartX = 0;
-    let touchEndX = 0;
     let touchStartY = 0;
-    let touchEndY = 0;
+    let isSwiping = false;
 
-    bookContainer.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-        touchStartY = e.changedTouches[0].screenY;
-    }, { passive: true });
+    const handleSwipeStart = (x, y) => {
+        touchStartX = x;
+        touchStartY = y;
+        isSwiping = true;
+    };
 
-    bookContainer.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        touchEndY = e.changedTouches[0].screenY;
+    const handleSwipeMove = (x, y) => {
+        if (!isSwiping) return;
         
-        const xDiff = touchEndX - touchStartX;
-        const yDiff = touchEndY - touchStartY;
+        const xDiff = x - touchStartX;
+        const yDiff = y - touchStartY;
         
-        // If the swipe was mostly horizontal and long enough (50px)
-        if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 40) {
+        // Instant flip as soon as the finger/mouse moves 30px horizontally
+        if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 30) {
+            isSwiping = false; // Stop tracking this swipe to prevent rapid-fire flips
             if (xDiff < 0) {
-                // Swiped Left (Next Page)
-                pageFlip.flipNext();
+                pageFlip.flipNext(); // Swiped Left
             } else {
-                // Swiped Right (Previous Page)
-                pageFlip.flipPrev();
+                pageFlip.flipPrev(); // Swiped Right
             }
         }
-    }, { passive: true });
+    };
+
+    const handleSwipeEnd = () => {
+        isSwiping = false;
+    };
+
+    // Mobile Touch Events
+    bookContainer.addEventListener('touchstart', (e) => handleSwipeStart(e.changedTouches[0].screenX, e.changedTouches[0].screenY), { passive: true });
+    bookContainer.addEventListener('touchmove', (e) => handleSwipeMove(e.changedTouches[0].screenX, e.changedTouches[0].screenY), { passive: true });
+    bookContainer.addEventListener('touchend', handleSwipeEnd, { passive: true });
+
+    // Desktop Mouse Events (so you can drag-to-swipe anywhere on the screen)
+    let isMouseDown = false;
+    bookContainer.addEventListener('mousedown', (e) => {
+        isMouseDown = true;
+        handleSwipeStart(e.screenX, e.screenY);
+    });
+    window.addEventListener('mousemove', (e) => {
+        if (isMouseDown) handleSwipeMove(e.screenX, e.screenY);
+    });
+    window.addEventListener('mouseup', () => {
+        isMouseDown = false;
+        handleSwipeEnd();
+    });
 });

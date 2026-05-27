@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Bibin & Stella - Wedding Invitation</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Outfit:wght@300;400;600&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <!-- Audio Elements -->
     <audio id="bgMusic" loop>
@@ -20,11 +23,13 @@
 
     <!-- Audio Toggle Button -->
     <button id="audioToggle" class="audio-btn" aria-label="Toggle Audio">
-        <svg id="icon-unmuted" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" style="display: none;">
+        <svg id="icon-unmuted" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"
+            fill="none" style="display: none;">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
         </svg>
-        <svg id="icon-muted" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+        <svg id="icon-muted" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2"
+            fill="none">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
             <line x1="23" y1="9" x2="17" y2="15"></line>
             <line x1="17" y1="9" x2="23" y2="15"></line>
@@ -36,25 +41,30 @@
 
     <!-- Main Book Container -->
     <div class="book-container">
-        
+
         <!-- Navigation Buttons -->
         <button class="nav-btn prev-btn" id="prevBtn" aria-label="Previous Page">
-            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
         </button>
         <button class="nav-btn next-btn" id="nextBtn" aria-label="Next Page">
-            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
         </button>
 
         <div id="book">
             <!-- Cover (Hard) -->
             <div class="my-page" data-density="hard">
-                <img src="assets/caricature_tr.png" class="page-corner-img corner-tr" alt="Couple Drawing">
                 
                 <!-- Finger Indicator now sits directly on the cover page -->
                 <div class="finger-indicator" id="fingerIndicator">
                     <span class="swipe-text">Swipe to open</span>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.5 2C8.67157 2 8 2.67157 8 3.5V11H7C5.89543 11 5 11.8954 5 13V15.5C5 18.5376 7.46243 21 10.5 21H13.5C16.5376 21 19 18.5376 19 15.5V9.5C19 8.67157 18.3284 8 17.5 8C17.4475 8 17.3957 8.00268 17.3448 8.0079C17.1517 7.43328 16.6087 7 15.95 7C15.8975 7 15.8457 7.00268 15.7948 7.0079C15.6017 6.43328 15.0587 6 14.4 6C14.3475 6 14.2957 6.00268 14.2448 6.0079C14.0517 5.43328 13.5087 5 12.85 5H12V3.5C12 2.67157 11.3284 2 10.5 2H9.5Z" fill="#b76e79" stroke="white" stroke-width="1.5"/>
+                        <path
+                            d="M9.5 2C8.67157 2 8 2.67157 8 3.5V11H7C5.89543 11 5 11.8954 5 13V15.5C5 18.5376 7.46243 21 10.5 21H13.5C16.5376 21 19 18.5376 19 15.5V9.5C19 8.67157 18.3284 8 17.5 8C17.4475 8 17.3957 8.00268 17.3448 8.0079C17.1517 7.43328 16.6087 7 15.95 7C15.8975 7 15.8457 7.00268 15.7948 7.0079C15.6017 6.43328 15.0587 6 14.4 6C14.3475 6 14.2957 6.00268 14.2448 6.0079C14.0517 5.43328 13.5087 5 12.85 5H12V3.5C12 2.67157 11.3284 2 10.5 2H9.5Z"
+                            fill="#b76e79" stroke="white" stroke-width="1.5" />
                     </svg>
                 </div>
 
@@ -62,6 +72,7 @@
                     <h1>Bibin & Stella</h1>
                     <p class="subtitle">Are getting married</p>
                     <img src="assets/cover_couple.png" alt="Bibin and Stella" class="illustration cover-img">
+                    <img src="assets/floral_divider.png" alt="Ornament" class="floral-divider">
                 </div>
             </div>
 
@@ -69,7 +80,6 @@
             <div class="my-page" data-density="hard">
                 <img src="assets/caricature_tl.png" class="page-corner-img corner-tl" alt="Couple Drawing">
                 <div class="page-content center-content">
-                    <p class="family-name">Bibin & Stella</p>
                     <p class="romantic-quote" style="margin-top: 30px; font-size: 1.8rem;">
                         "Two souls with but a single thought,<br>
                         Two hearts that beat as one."
@@ -99,8 +109,10 @@
                     <div class="family-details">
                         <p><strong>Father:</strong> Antony Thomas (Farmer)</p>
                         <p><strong>Mother:</strong> Selin Antony (House Wife)</p>
-                        <p><strong>Elder Brother:</strong> Sojin Antony (Project Lead, IBM Kochi) <br>& Wife Jerry Varughese (Nurse, Riyadh) <br> Son: Ryan Antony Sojin</p>
-                        <p><strong>2nd Brother:</strong> Bobin Antony (Electrical Technician & Entrepreneur) <br>& Wife Binny Bobin (Nurse) <br> Son: Aiden Antony Bobin</p>
+                        <p><strong>Elder Brother:</strong> Sojin Antony (Project Lead, IBM Kochi) <br>& Wife Jerry
+                            Varughese (Nurse, Riyadh) <br> Son: Ryan Antony Sojin</p>
+                        <p><strong>2nd Brother:</strong> Bobin Antony (Electrical Technician & Entrepreneur) <br>& Wife
+                            Binny Bobin (Nurse) <br> Son: Aiden Antony Bobin</p>
                     </div>
                 </div>
             </div>
@@ -136,7 +148,8 @@
                     <h2>You Are Invited!</h2>
                     <img src="assets/final_couple.png" alt="Together forever" class="illustration">
                     <p class="invitation-text">
-                        We would be absolutely thrilled to have you join us as we celebrate our love and begin this beautiful new journey together. 
+                        We would be absolutely thrilled to have you join us as we celebrate our love and begin this
+                        beautiful new journey together.
                     </p>
                 </div>
             </div>
@@ -171,19 +184,51 @@
                     <div class="calendar-wrapper">
                         <div class="calendar-header">December 2026</div>
                         <div class="calendar-grid">
-                            <div class="day-name">Mo</div><div class="day-name">Tu</div><div class="day-name">We</div><div class="day-name">Th</div><div class="day-name">Fr</div><div class="day-name">Sa</div><div class="day-name">Su</div>
-                            
+                            <div class="day-name">Mo</div>
+                            <div class="day-name">Tu</div>
+                            <div class="day-name">We</div>
+                            <div class="day-name">Th</div>
+                            <div class="day-name">Fr</div>
+                            <div class="day-name">Sa</div>
+                            <div class="day-name">Su</div>
+
                             <div class="empty"></div>
-                            <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div>
-                            <div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div>
-                            <div>14</div><div>15</div><div>16</div><div>17</div><div>18</div><div>19</div><div>20</div>
-                            <div>21</div><div>22</div><div>23</div><div>24</div><div>25</div><div>26</div>
+                            <div>1</div>
+                            <div>2</div>
+                            <div>3</div>
+                            <div>4</div>
+                            <div>5</div>
+                            <div>6</div>
+                            <div>7</div>
+                            <div>8</div>
+                            <div>9</div>
+                            <div>10</div>
+                            <div>11</div>
+                            <div>12</div>
+                            <div>13</div>
+                            <div>14</div>
+                            <div>15</div>
+                            <div>16</div>
+                            <div>17</div>
+                            <div>18</div>
+                            <div>19</div>
+                            <div>20</div>
+                            <div>21</div>
+                            <div>22</div>
+                            <div>23</div>
+                            <div>24</div>
+                            <div>25</div>
+                            <div>26</div>
                             <div class="highlighted"><span>27</span></div>
-                            <div>28</div><div>29</div><div>30</div><div>31</div>
+                            <div>28</div>
+                            <div>29</div>
+                            <div>30</div>
+                            <div>31</div>
                         </div>
                     </div>
 
-                    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Bibin+%26+Stella+Wedding&dates=20261227T063000Z/20261227T103000Z&details=Join+us+as+we+celebrate+our+love!&location=Pala+Lalam+old+church" target="_blank" class="add-to-calendar">Add to Calendar</a>
+                    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Bibin+%26+Stella+Wedding&dates=20261227T063000Z/20261227T103000Z&details=Join+us+as+we+celebrate+our+love!&location=Pala+Lalam+old+church"
+                        target="_blank" class="add-to-calendar">Add to Calendar</a>
                 </div>
             </div>
 
@@ -194,7 +239,11 @@
                     <h3>Wedding Location</h3>
                     <p class="family-name" style="margin-top: 5px;">Pala Lalam old church</p>
                     <a href="https://maps.app.goo.gl/bNWCm38jHC3BqwDp6" target="_blank" class="map-link-box">
-                        <svg viewBox="0 0 24 24" width="32" height="32" stroke="var(--rose)" stroke-width="2" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <svg viewBox="0 0 24 24" width="32" height="32" stroke="var(--rose)" stroke-width="2"
+                            fill="none">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
                         <span>Open in Google Maps</span>
                     </a>
                 </div>
@@ -214,4 +263,5 @@
     <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>

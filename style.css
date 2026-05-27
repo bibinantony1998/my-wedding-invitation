@@ -45,7 +45,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    min-height: 100dvh; /* Use dynamic viewport height to fix mobile browser navbar cutoffs */
     overflow: hidden;
     position: relative;
 }
@@ -64,11 +64,12 @@ body {
 /* Page Corner Caricatures */
 .page-corner-img {
     position: absolute;
-    z-index: 1;
-    opacity: 0.65;
-    mix-blend-mode: multiply; /* Removes the white background */
+    width: 120px;
+    opacity: 0.85;
     pointer-events: none;
-    max-width: 140px;
+    z-index: 10;
+    mix-blend-mode: multiply; /* Makes white background transparent */
+    filter: contrast(1.3) brightness(1.1); /* Forces any slight grey background to pure white so the box disappears */
 }
 .corner-tl { top: 15px; left: 15px; width: 100px; }
 .corner-tr { top: 20px; right: 15px; width: 120px; }
@@ -275,6 +276,19 @@ h3 { font-size: 1.4rem; margin-top: 10px; color: var(--rose); font-weight: 600; 
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     border: 3px solid var(--gold-light);
     display: block;
+}
+
+.floral-divider {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    height: 120px; /* Takes up the available vertical space below the couple */
+    object-fit: contain; /* Keeps the elegant shape fully visible without cropping */
+    mix-blend-mode: multiply;
+    opacity: 0.6; /* Very subtle watermark filler */
+    pointer-events: none;
 }
 
 .cover-img {
