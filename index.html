@@ -10,28 +10,24 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Hidden Objects Game Container -->
-    <div id="gameContainer"></div>
-    <div class="game-hint">Can you find the 5 hidden rings? 💍</div>
-
-    <!-- Finger Indicator -->
-    <div class="finger-indicator" id="fingerIndicator">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9.5 2C8.67157 2 8 2.67157 8 3.5V11H7C5.89543 11 5 11.8954 5 13V15.5C5 18.5376 7.46243 21 10.5 21H13.5C16.5376 21 19 18.5376 19 15.5V9.5C19 8.67157 18.3284 8 17.5 8C17.4475 8 17.3957 8.00268 17.3448 8.0079C17.1517 7.43328 16.6087 7 15.95 7C15.8975 7 15.8457 7.00268 15.7948 7.0079C15.6017 6.43328 15.0587 6 14.4 6C14.3475 6 14.2957 6.00268 14.2448 6.0079C14.0517 5.43328 13.5087 5 12.85 5H12V3.5C12 2.67157 11.3284 2 10.5 2H9.5Z" fill="#b76e79" stroke="white" stroke-width="1.5"/>
-        </svg>
-    </div>
+    <!-- Ambient Particle Canvas -->
+    <canvas id="particleCanvas"></canvas>
 
     <!-- Main Book Container -->
     <div class="book-container">
-        <!-- Corner Caricatures attached to book -->
-        <img src="assets/caricature_tl.png" class="corner-img corner-tl" alt="Couple">
-        <img src="assets/caricature_tr.png" class="corner-img corner-tr" alt="Couple">
-        <img src="assets/caricature_bl.png" class="corner-img corner-bl" alt="Couple">
-        <img src="assets/caricature_br.png" class="corner-img corner-br" alt="Couple">
 
         <div id="book">
             <!-- Cover (Hard) -->
             <div class="my-page" data-density="hard">
+                <img src="assets/caricature_tl.png" class="page-corner-img corner-tl" alt="Couple Drawing">
+                
+                <!-- Finger Indicator now sits directly on the cover page -->
+                <div class="finger-indicator" id="fingerIndicator">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9.5 2C8.67157 2 8 2.67157 8 3.5V11H7C5.89543 11 5 11.8954 5 13V15.5C5 18.5376 7.46243 21 10.5 21H13.5C16.5376 21 19 18.5376 19 15.5V9.5C19 8.67157 18.3284 8 17.5 8C17.4475 8 17.3957 8.00268 17.3448 8.0079C17.1517 7.43328 16.6087 7 15.95 7C15.8975 7 15.8457 7.00268 15.7948 7.0079C15.6017 6.43328 15.0587 6 14.4 6C14.3475 6 14.2957 6.00268 14.2448 6.0079C14.0517 5.43328 13.5087 5 12.85 5H12V3.5C12 2.67157 11.3284 2 10.5 2H9.5Z" fill="#b76e79" stroke="white" stroke-width="1.5"/>
+                    </svg>
+                </div>
+
                 <div class="page-content center-content cover-page">
                     <h1>Bibin & Stella</h1>
                     <p class="subtitle">Are getting married</p>
@@ -55,6 +51,7 @@
 
             <!-- Page 1: Groom Intro -->
             <div class="my-page">
+                <img src="assets/caricature_tr.png" class="page-corner-img corner-tr" alt="Couple Drawing">
                 <div class="page-content">
                     <h2>The Groom</h2>
                     <img src="assets/groom_solo.png" alt="Bibin Antony" class="illustration">
@@ -81,6 +78,7 @@
 
             <!-- Page 3: Bride Intro -->
             <div class="my-page">
+                <img src="assets/caricature_bl.png" class="page-corner-img corner-bl" alt="Couple Drawing">
                 <div class="page-content">
                     <h2>The Bride</h2>
                     <img src="assets/bride_solo.png" alt="Stella Thankachan" class="illustration">
@@ -103,6 +101,7 @@
 
             <!-- Page 5: Invitation -->
             <div class="my-page">
+                <img src="assets/caricature_br.png" class="page-corner-img corner-br" alt="Couple Drawing">
                 <div class="page-content center-content">
                     <h2>You Are Invited!</h2>
                     <img src="assets/final_couple.png" alt="Together forever" class="illustration">
@@ -123,7 +122,6 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

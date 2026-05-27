@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Initialize PageFlip
+    const bookContainer = document.querySelector('.book-container');
     const bookEl = document.getElementById('book');
+    
+    // 1. Initialize PageFlip
     const pageFlip = new St.PageFlip(bookEl, {
         width: 350, // base page width
         height: 500, // base page height
@@ -18,111 +20,163 @@ document.addEventListener('DOMContentLoaded', function() {
     // Load pages from HTML
     pageFlip.loadFromHTML(document.querySelectorAll('.my-page'));
 
-    // Fix for the left shadow on the cover page
-    bookEl.setAttribute('data-current-page', '0');
+    // Fix for the left shadow and binding string visibility on cover
+    bookContainer.setAttribute('data-current-page', '0');
     
     pageFlip.on('flip', (e) => {
-        bookEl.setAttribute('data-current-page', e.data); // e.data is the new page number
+        bookContainer.setAttribute('data-current-page', e.data);
         
         // Hide the finger animation on interaction
-        if (fingerIndicator && fingerIndicator.style.display !== 'none') {
+        const fingerIndicator = document.getElementById('fingerIndicator');
+        if (e.data > 0 && fingerIndicator && fingerIndicator.style.display !== 'none') {
             fingerIndicator.style.display = 'none';
         }
     });
 
-    // 2. Hide Finger Indicator logic
-    const fingerIndicator = document.getElementById('fingerIndicator');
-    const updateFingerPosition = () => {
-        const bookRect = bookEl.getBoundingClientRect();
-        if(fingerIndicator) {
-            fingerIndicator.style.left = (bookRect.right - 40) + 'px';
-            fingerIndicator.style.top = (bookRect.bottom - 40) + 'px';
+    // 3. Ambient Particle Canvas Game
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let mouse = { x: -1000, y: -1000, radius: 100 };
+
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    const colors = ['#d4af37', '#f3e5ab', '#b76e79', '#ffffff'];
+
+    class Particle {
+        constructor(x, y, isBurst = false) {
+            this.x = x || Math.random() * canvas.width;
+            this.y = y || Math.random() * canvas.height;
+            this.size = Math.random() * 5 + 2; // Increased size
+            
+            // If part of a click burst, give them higher initial velocity
+            const speedMult = isBurst ? 5 : 0.5;
+            this.vx = (Math.random() - 0.5) * speedMult;
+            this.vy = (Math.random() - 0.5) * speedMult;
+            
+            this.color = colors[Math.floor(Math.random() * colors.length)];
+            this.baseAlpha = Math.random() * 0.6 + 0.4; // Increased visibility
+            this.alpha = this.baseAlpha;
+            this.life = isBurst ? Math.random() * 60 + 40 : Infinity; // Burst particles die
         }
-    };
-    setTimeout(updateFingerPosition, 500);
-    window.addEventListener('resize', updateFingerPosition);
 
-    // 3. Hidden Objects Game Logic
-    const gameContainer = document.getElementById('gameContainer');
-    const hintText = document.querySelector('.game-hint');
-    const totalRings = 5;
-    let foundRings = 0;
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.globalAlpha = this.alpha;
+            ctx.fill();
+            
+            // Add a subtle glow
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = this.color;
+            ctx.globalAlpha = 1; // Reset for other drawing
+            ctx.shadowBlur = 0;
+        }
 
-    // Define safe spawn zones (percentages) to avoid the centered book
-    const spawnZones = [
-        { top: [5, 20], left: [5, 25] },     // Top Left
-        { top: [5, 20], left: [70, 90] },    // Top Right
-        { top: [75, 90], left: [5, 25] },    // Bottom Left
-        { top: [75, 90], left: [70, 90] },   // Bottom Right
-        { top: [5, 15], left: [40, 60] },    // Top Center
-    ];
+        update() {
+            // Mouse interaction
+            const dx = mouse.x - this.x;
+            const dy = mouse.y - this.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
 
-    function getRandom(min, max) {
-        return Math.random() * (max - min) + min;
+            // Repel particles from mouse slightly
+            if (distance < mouse.radius) {
+                const forceDirectionX = dx / distance;
+                const forceDirectionY = dy / distance;
+                const force = (mouse.radius - distance) / mouse.radius;
+                
+                this.vx -= forceDirectionX * force * 0.2;
+                this.vy -= forceDirectionY * force * 0.2;
+                
+                // Brighten when near mouse
+                this.alpha = Math.min(1, this.baseAlpha + force);
+            } else {
+                // Fade back to normal
+                if (this.alpha > this.baseAlpha) {
+                    this.alpha -= 0.01;
+                }
+            }
+
+            // Apply velocity with some friction
+            this.vx *= 0.98;
+            this.vy *= 0.98;
+            
+            // Add a little random drift (Brownian motion)
+            this.vx += (Math.random() - 0.5) * 0.1;
+            this.vy += (Math.random() - 0.5) * 0.1;
+
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // Bounce off edges
+            if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+            if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+            // Handle lifespan for burst particles
+            if (this.life !== Infinity) {
+                this.life--;
+                if (this.life < 20) {
+                    this.alpha = Math.max(0, this.alpha - 0.05);
+                }
+            }
+        }
     }
 
-    // Spawn the rings
-    spawnZones.forEach(zone => {
-        const ring = document.createElement('div');
-        ring.className = 'hidden-ring';
-        ring.innerHTML = '💍'; // You can change this to an image if you prefer
+    // Initialize ambient particles
+    const particleCount = (window.innerWidth * window.innerHeight) / 3000; // Increased count
+    for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        // Position them based on the zone percentages
-        ring.style.top = getRandom(zone.top[0], zone.top[1]) + '%';
-        ring.style.left = getRandom(zone.left[0], zone.left[1]) + '%';
-        
-        // Random slight rotation for natural look
-        const rot = getRandom(-30, 30);
-        ring.style.transform = `rotate(${rot}deg)`;
-        
-        // On click event
-        ring.addEventListener('click', function() {
-            if (this.classList.contains('found')) return;
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
             
-            this.classList.add('found');
-            foundRings++;
-            
-            if (foundRings < totalRings) {
-                hintText.innerHTML = `Found ${foundRings}/${totalRings} rings! Keep looking! 💍`;
-            } else {
-                hintText.innerHTML = `You found all the rings! 🎉`;
-                hintText.style.color = '#28a745'; // green success
-                triggerConfetti();
+            if (particles[i].life <= 0) {
+                particles.splice(i, 1);
+                i--;
             }
-            
-            // Remove element after animation
-            setTimeout(() => this.remove(), 300);
-        });
+        }
         
-        gameContainer.appendChild(ring);
+        requestAnimationFrame(animate);
+    }
+    animate();
+
+    // Event Listeners for Particle Interaction
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
     });
 
-    // Confetti Celebration
-    function triggerConfetti() {
-        if (typeof confetti === 'function') {
-            const duration = 3000;
-            const end = Date.now() + duration;
-
-            (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: ['#d4af37', '#f3e5ab', '#b76e79', '#ffffff']
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: ['#d4af37', '#f3e5ab', '#b76e79', '#ffffff']
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            }());
+    // Touch support for ambient particles
+    window.addEventListener('touchmove', (e) => {
+        if(e.touches.length > 0) {
+            mouse.x = e.touches[0].clientX;
+            mouse.y = e.touches[0].clientY;
         }
-    }
+    }, {passive: true});
+
+    // Burst effect on click
+    window.addEventListener('mousedown', (e) => {
+        // Don't burst if clicking on the book
+        if (e.target.closest('.book-container')) return;
+        
+        for(let i = 0; i < 30; i++) {
+            particles.push(new Particle(e.x, e.y, true));
+        }
+    });
+
+    window.addEventListener('mouseout', () => {
+        mouse.x = -1000;
+        mouse.y = -1000;
+    });
 });

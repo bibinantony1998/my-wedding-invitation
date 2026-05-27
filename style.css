@@ -26,76 +26,57 @@ body {
     position: relative;
 }
 
-/* Game Container */
-#gameContainer {
+/* Ambient Particle Canvas */
+#particleCanvas {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 5;
-    pointer-events: none; /* Let clicks pass through where there are no rings */
+    z-index: 1;
+    pointer-events: auto; /* Let it capture mouse movements */
 }
 
-.game-hint {
+/* Page Corner Caricatures */
+.page-corner-img {
     position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.9);
-    padding: 8px 16px;
-    border-radius: 20px;
-    color: var(--rose);
-    font-size: 0.9rem;
-    z-index: 20;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 1;
+    opacity: 0.65;
+    mix-blend-mode: multiply; /* Removes the white background */
     pointer-events: none;
-    font-weight: 600;
+    max-width: 140px;
+}
+.corner-tl { top: 15px; left: 15px; width: 100px; }
+.corner-tr { top: 20px; right: 15px; width: 120px; }
+.corner-bl { bottom: 15px; left: 15px; width: 130px; }
+.corner-br { bottom: 20px; right: 15px; width: 110px; }
+
+/* Smoothly animate book position to center the cover */
+#book {
+    transition: transform 0.8s ease;
 }
 
-.hidden-ring {
-    position: absolute;
-    font-size: 24px;
-    cursor: pointer;
-    pointer-events: auto;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    user-select: none;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-    z-index: 6;
+/* Center the front cover (shifts the book left by half a page width) */
+.book-container[data-current-page="0"] #book {
+    transform: translateX(-25%);
 }
 
-.hidden-ring:hover {
-    transform: scale(1.3);
+/* Center the back cover (shifts the book right by half a page width) */
+/* We have 8 pages total, so index 7 is the back cover */
+.book-container[data-current-page="7"] #book {
+    transform: translateX(25%);
 }
-
-.hidden-ring.found {
-    transform: scale(2) translateY(-20px);
-    opacity: 0;
-}
-
-/* Corner Caricatures */
-.corner-img {
-    position: absolute;
-    z-index: -1; /* Behind the book */
-    opacity: 0.8;
-    pointer-events: none; 
-    mix-blend-mode: multiply;
-}
-.corner-tl { top: -40px; left: -40px; width: 120px; }
-.corner-tr { top: -30px; right: -50px; width: 140px; }
-.corner-bl { bottom: -40px; left: -30px; width: 150px; }
-.corner-br { bottom: -50px; right: -40px; width: 130px; }
 
 /* Finger Indicator */
 .finger-indicator {
     position: absolute;
-    right: -20px; /* positioned relative to book container via JS or CSS */
-    bottom: 40px;
-    width: 50px;
-    height: 50px;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
     z-index: 50;
     pointer-events: none;
-    animation: dragCorner 2.5s infinite ease-in-out;
+    animation: fingerDrag 2s infinite ease-in-out;
 }
 .finger-indicator svg {
     width: 100%;
@@ -103,11 +84,11 @@ body {
     filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.2));
 }
 
-@keyframes dragCorner {
-    0% { transform: translate(0, 0) rotate(-15deg); opacity: 0; }
-    20% { transform: translate(0, 0) rotate(-15deg); opacity: 1; }
-    80% { transform: translate(-60px, -40px) rotate(-15deg); opacity: 1; }
-    100% { transform: translate(-60px, -40px) rotate(-15deg); opacity: 0; }
+@keyframes fingerDrag {
+    0% { transform: translate(0, 0) scale(1); opacity: 0; }
+    20% { transform: translate(0, 0) scale(0.9); opacity: 1; }
+    80% { transform: translate(-30px, 10px) scale(0.9); opacity: 1; }
+    100% { transform: translate(-30px, 10px) scale(1); opacity: 0; }
 }
 
 /* Main Book Container */
@@ -125,7 +106,7 @@ body {
 /* The book element where StPageFlip attaches */
 #book {
     pointer-events: auto; /* Re-enable pointer events for the book itself */
-    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    /* Remove box shadow from here so empty pages don't cast shadows */
 }
 
 .my-page {
@@ -136,15 +117,15 @@ body {
 }
 /* Right-side pages binding */
 .my-page.--right {
-    box-shadow: inset 15px 0 20px rgba(0,0,0,0.05), inset -2px 0 5px rgba(255,255,255,0.8);
+    box-shadow: inset 15px 0 20px rgba(0,0,0,0.05), inset -2px 0 5px rgba(255,255,255,0.8), 5px 10px 20px rgba(0,0,0,0.15);
 }
 /* Left-side pages binding */
 .my-page.--left {
-    box-shadow: inset -15px 0 20px rgba(0,0,0,0.05), inset 2px 0 5px rgba(255,255,255,0.8);
+    box-shadow: inset -15px 0 20px rgba(0,0,0,0.05), inset 2px 0 5px rgba(255,255,255,0.8), -5px 10px 20px rgba(0,0,0,0.15);
 }
 
 /* Remove left pane shadow when book is closed on page 0 */
-#book[data-current-page="0"] .my-page.--left {
+.book-container[data-current-page="0"] .my-page.--left {
     box-shadow: none !important;
     background: transparent !important;
 }
