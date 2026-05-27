@@ -10,6 +10,27 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Audio Elements -->
+    <audio id="bgMusic" loop>
+        <source src="assets/bg-music.mp3">
+    </audio>
+    <audio id="flipSound">
+        <source src="assets/page-flip.mp3">
+    </audio>
+
+    <!-- Audio Toggle Button -->
+    <button id="audioToggle" class="audio-btn" aria-label="Toggle Audio">
+        <svg id="icon-unmuted" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" style="display: none;">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <svg id="icon-muted" viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+    </button>
+
     <!-- Ambient Particle Canvas -->
     <canvas id="particleCanvas"></canvas>
 
@@ -41,10 +62,6 @@
                     <h1>Bibin & Stella</h1>
                     <p class="subtitle">Are getting married</p>
                     <img src="assets/cover_couple.png" alt="Bibin and Stella" class="illustration cover-img">
-                    <div class="details">
-                        <p><strong>Date:</strong> 27/12/2026, 12:00 PM</p>
-                        <p><strong>Location:</strong> Pala Lalam old church</p>
-                    </div>
                 </div>
             </div>
 
@@ -53,9 +70,10 @@
                 <img src="assets/caricature_tl.png" class="page-corner-img corner-tl" alt="Couple Drawing">
                 <div class="page-content center-content">
                     <p class="family-name">Bibin & Stella</p>
-                    <div class="map-placeholder">
-                        <span>[ Map direction will be added here ]</span>
-                    </div>
+                    <p class="romantic-quote" style="margin-top: 30px; font-size: 1.8rem;">
+                        "Two souls with but a single thought,<br>
+                        Two hearts that beat as one."
+                    </p>
                 </div>
             </div>
 
@@ -76,7 +94,7 @@
             <!-- Page 2: Groom Family -->
             <div class="my-page">
                 <img src="assets/caricature_bl.png" class="page-corner-img corner-bl" alt="Couple Drawing">
-                <div class="page-content">
+                <div class="page-content center-content">
                     <h3>Groom's Family</h3>
                     <div class="family-details">
                         <p><strong>Father:</strong> Antony Thomas (Farmer)</p>
@@ -90,7 +108,7 @@
             <!-- Page 3: Bride Intro -->
             <div class="my-page">
                 <img src="assets/caricature_tr.png" class="page-corner-img corner-tr" alt="Couple Drawing">
-                <div class="page-content">
+                <div class="page-content center-content">
                     <h2>The Bride</h2>
                     <img src="assets/bride_solo.png" alt="Stella Thankachan" class="illustration">
                     <h3>Stella Thankachan</h3>
@@ -103,7 +121,7 @@
             <!-- Page 4: Bride Family -->
             <div class="my-page">
                 <img src="assets/caricature_tl.png" class="page-corner-img corner-tl" alt="Couple Drawing">
-                <div class="page-content">
+                <div class="page-content center-content">
                     <h3>Bride's Family</h3>
                     <div class="family-details">
                         <p><em>Family details to be added... <br>(Sister, Brother, Father, Mother)</em></p>
@@ -123,7 +141,66 @@
                 </div>
             </div>
 
-            <!-- Page 6: Thank You / Back Cover (Hard) -->
+            <!-- Page 6: Calendar & Countdown -->
+            <div class="my-page">
+                <img src="assets/caricature_tl.png" class="page-corner-img corner-tl" alt="Couple Drawing">
+                <div class="page-content center-content calendar-page">
+                    <div class="date-header">
+                        <span class="day">SUNDAY</span>
+                        <span class="divider">|</span>
+                        <span class="date-num">27</span>
+                        <span class="divider">|</span>
+                        <span class="month">DEC</span>
+                    </div>
+                    <div class="year">2026</div>
+
+                    <div class="schedule">
+                        <div class="event">
+                            <span class="event-name">CEREMONY</span>
+                            <span class="event-time">12:00</span>
+                        </div>
+                    </div>
+
+                    <div class="countdown-section">
+                        <h4>Countdown</h4>
+                        <div id="countdown" class="countdown-timer">
+                            Loading...
+                        </div>
+                    </div>
+
+                    <div class="calendar-wrapper">
+                        <div class="calendar-header">December 2026</div>
+                        <div class="calendar-grid">
+                            <div class="day-name">Mo</div><div class="day-name">Tu</div><div class="day-name">We</div><div class="day-name">Th</div><div class="day-name">Fr</div><div class="day-name">Sa</div><div class="day-name">Su</div>
+                            
+                            <div class="empty"></div>
+                            <div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div>
+                            <div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div>
+                            <div>14</div><div>15</div><div>16</div><div>17</div><div>18</div><div>19</div><div>20</div>
+                            <div>21</div><div>22</div><div>23</div><div>24</div><div>25</div><div>26</div>
+                            <div class="highlighted"><span>27</span></div>
+                            <div>28</div><div>29</div><div>30</div><div>31</div>
+                        </div>
+                    </div>
+
+                    <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Bibin+%26+Stella+Wedding&dates=20261227T063000Z/20261227T103000Z&details=Join+us+as+we+celebrate+our+love!&location=Pala+Lalam+old+church" target="_blank" class="add-to-calendar">Add to Calendar</a>
+                </div>
+            </div>
+
+            <!-- Page 7: Map Location -->
+            <div class="my-page">
+                <img src="assets/caricature_tr.png" class="page-corner-img corner-tr" alt="Couple Drawing">
+                <div class="page-content center-content">
+                    <h3>Wedding Location</h3>
+                    <p class="family-name" style="margin-top: 5px;">Pala Lalam old church</p>
+                    <a href="https://maps.app.goo.gl/bNWCm38jHC3BqwDp6" target="_blank" class="map-link-box">
+                        <svg viewBox="0 0 24 24" width="32" height="32" stroke="var(--rose)" stroke-width="2" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <span>Open in Google Maps</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Page 8: Thank You / Back Cover (Hard) -->
             <div class="my-page" data-density="hard">
                 <img src="assets/caricature_bl.png" class="page-corner-img corner-bl" alt="Couple Drawing">
                 <div class="page-content center-content">

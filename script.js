@@ -2,6 +2,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const bookContainer = document.querySelector('.book-container');
     const bookEl = document.getElementById('book');
     
+    // Audio Initialization
+    const bgMusic = document.getElementById('bgMusic');
+    const flipSound = document.getElementById('flipSound');
+    const audioToggle = document.getElementById('audioToggle');
+    const iconMuted = document.getElementById('icon-muted');
+    const iconUnmuted = document.getElementById('icon-unmuted');
+    
+    let isMusicPlaying = false;
+    let userHasInteracted = false;
+
+    // Autoplay music on first interaction
+    const startAudio = () => {
+        if (!userHasInteracted) {
+            userHasInteracted = true;
+            bgMusic.volume = 1.0; // Full volume
+            bgMusic.play().then(() => {
+                isMusicPlaying = true;
+                iconMuted.style.display = 'none';
+                iconUnmuted.style.display = 'block';
+            }).catch(e => console.log("Audio autoplay prevented"));
+        }
+    };
+    window.addEventListener('click', startAudio, { once: true });
+    window.addEventListener('touchstart', startAudio, { once: true, passive: true });
+
+    // Audio Toggle Button Logic
+    audioToggle.addEventListener('click', (e) => {
+        e.stopPropagation(); // prevent global click from re-triggering
+        if (isMusicPlaying) {
+            bgMusic.pause();
+            isMusicPlaying = false;
+            iconMuted.style.display = 'block';
+            iconUnmuted.style.display = 'none';
+        } else {
+            bgMusic.play();
+            isMusicPlaying = true;
+            iconMuted.style.display = 'none';
+            iconUnmuted.style.display = 'block';
+        }
+    });
+
     // 1. Initialize PageFlip
     const pageFlip = new St.PageFlip(bookEl, {
         width: 350, // base page width
@@ -19,12 +60,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Load pages from HTML
     pageFlip.loadFromHTML(document.querySelectorAll('.my-page'));
+    
+    // Set initial cover state
+    bookContainer.classList.add('is-cover');
 
     // Fix for the left shadow and binding string visibility on cover
     bookContainer.setAttribute('data-current-page', '0');
     
     pageFlip.on('flip', (e) => {
         bookContainer.setAttribute('data-current-page', e.data);
+        
+        // Dynamic Book Centering
+        const totalPages = pageFlip.getPageCount();
+        bookContainer.classList.toggle('is-cover', e.data === 0);
+        bookContainer.classList.toggle('is-back-cover', e.data === totalPages - 1);
+        
+        // Play flip sound
+        if (userHasInteracted) {
+            flipSound.currentTime = 0;
+            flipSound.play().catch(err => console.log(err));
+        }
         
         // Hide the finger animation on interaction
         const fingerIndicator = document.getElementById('fingerIndicator');
@@ -201,4 +256,30 @@ document.addEventListener('DOMContentLoaded', function() {
         mouse.x = -1000;
         mouse.y = -1000;
     });
+
+    // 4. Countdown Timer Logic
+    const countdownEl = document.getElementById('countdown');
+    if (countdownEl) {
+        const weddingDate = new Date("Dec 27, 2026 12:00:00").getTime();
+        
+        const updateCountdown = () => {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                countdownEl.innerHTML = "It's Wedding Time!";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownEl.innerHTML = `${days} days ${hours} hours ${minutes} min ${seconds} sec`;
+        };
+
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    }
 });
