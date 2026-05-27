@@ -33,6 +33,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Navigation Buttons Logic
+    document.getElementById('prevBtn').addEventListener('click', () => {
+        pageFlip.flipPrev();
+    });
+    
+    document.getElementById('nextBtn').addEventListener('click', () => {
+        pageFlip.flipNext();
+    });
+
     // 3. Ambient Particle Canvas Game
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
@@ -165,17 +174,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, {passive: true});
 
-    // Burst effect on click
-    window.addEventListener('mousedown', (e) => {
+    // Burst effect on click or tap
+    const handleBurst = (e) => {
         // Don't burst if clicking on the book
         if (e.target.closest('.book-container')) return;
         
-        for(let i = 0; i < 30; i++) {
-            particles.push(new Particle(e.x, e.y, true));
+        const x = e.clientX || (e.touches && e.touches[0].clientX);
+        const y = e.clientY || (e.touches && e.touches[0].clientY);
+        
+        if (x !== undefined && y !== undefined) {
+            for(let i = 0; i < 30; i++) {
+                particles.push(new Particle(x, y, true));
+            }
         }
-    });
+    };
+
+    window.addEventListener('mousedown', handleBurst);
+    window.addEventListener('touchstart', handleBurst, {passive: true});
 
     window.addEventListener('mouseout', () => {
+        mouse.x = -1000;
+        mouse.y = -1000;
+    });
+
+    window.addEventListener('touchend', () => {
         mouse.x = -1000;
         mouse.y = -1000;
     });

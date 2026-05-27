@@ -56,15 +56,37 @@ body {
     transition: transform 0.8s ease;
 }
 
-/* Center the front cover (shifts the book left by half a page width) */
-.book-container[data-current-page="0"] #book {
-    transform: translateX(-25%);
+@media (min-width: 601px) {
+    /* Center the front cover (shifts the book left by half a page width) */
+    .book-container[data-current-page="0"] #book {
+        transform: translateX(-25%);
+    }
+
+    /* Center the back cover (shifts the book right by half a page width) */
+    /* We have 8 pages total, so index 7 is the back cover */
+    .book-container[data-current-page="7"] #book {
+        transform: translateX(25%);
+    }
+
+    /* Hide the swipe text on desktop */
+    .swipe-text {
+        display: none;
+    }
 }
 
-/* Center the back cover (shifts the book right by half a page width) */
-/* We have 8 pages total, so index 7 is the back cover */
-.book-container[data-current-page="7"] #book {
-    transform: translateX(25%);
+@media (max-width: 600px) {
+    .page-content h1 {
+        font-size: 2.5rem !important;
+    }
+    .page-content h2 {
+        font-size: 1.8rem !important;
+    }
+    .finger-indicator {
+        bottom: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+    }
 }
 
 /* Finger Indicator */
@@ -72,35 +94,92 @@ body {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    width: 40px;
+    width: 150px;
     height: 40px;
     z-index: 50;
     pointer-events: none;
-    animation: fingerDrag 2s infinite ease-in-out;
+    animation: fingerDrag 2.5s infinite ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
 }
 .finger-indicator svg {
-    width: 100%;
-    height: 100%;
+    width: 40px;
+    height: 40px;
     filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.2));
+}
+.swipe-text {
+    font-family: 'Outfit', sans-serif;
+    color: var(--rose);
+    font-size: 1rem;
+    font-weight: 600;
+    text-shadow: 0 1px 3px rgba(255,255,255,0.9);
+    opacity: 0;
+    animation: fadeInOut 2.5s infinite ease-in-out;
 }
 
 @keyframes fingerDrag {
     0% { transform: translate(0, 0) scale(1); opacity: 0; }
     20% { transform: translate(0, 0) scale(0.9); opacity: 1; }
-    80% { transform: translate(-30px, 10px) scale(0.9); opacity: 1; }
-    100% { transform: translate(-30px, 10px) scale(1); opacity: 0; }
+    70% { transform: translate(-100px, -10px) scale(0.9); opacity: 1; }
+    100% { transform: translate(-100px, -10px) scale(1); opacity: 0; }
+}
+@keyframes fadeInOut {
+    0% { opacity: 0; }
+    20% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; }
 }
 
 /* Main Book Container */
 .book-container {
-    position: relative;
-    z-index: 10; /* Above canvas and corners */
+    width: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Allow canvas drawing */
+    perspective: 1500px;
+    z-index: 10;
+    position: relative;
+    padding: 40px 15px; /* Ensures space around the book */
+}
+
+/* Navigation Buttons */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--rose);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: background 0.3s, transform 0.3s, opacity 0.3s;
+}
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: translateY(-50%) scale(1.1);
+}
+.prev-btn { left: 5px; }
+.next-btn { right: 5px; }
+
+/* Hide prev button on cover */
+.book-container[data-current-page="0"] .prev-btn {
+    opacity: 0;
+    pointer-events: none;
+}
+/* Hide next button on back cover (7) */
+.book-container[data-current-page="7"] .next-btn {
+    opacity: 0;
+    pointer-events: none;
 }
 
 /* The book element where StPageFlip attaches */
