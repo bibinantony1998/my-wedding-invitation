@@ -1,0 +1,264 @@
+:root {
+    --gold: #d4af37;
+    --gold-light: #f3e5ab;
+    --ivory: #fffff0;
+    --text-dark: #333333;
+    --rose: #b76e79;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background-color: #f9f6f0;
+    background-image: radial-gradient(circle, #fdfbf7 0%, #f1e9db 100%);
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Game Container */
+#gameContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none; /* Let clicks pass through where there are no rings */
+}
+
+.game-hint {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: var(--rose);
+    font-size: 0.9rem;
+    z-index: 20;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    pointer-events: none;
+    font-weight: 600;
+}
+
+.hidden-ring {
+    position: absolute;
+    font-size: 24px;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    user-select: none;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    z-index: 6;
+}
+
+.hidden-ring:hover {
+    transform: scale(1.3);
+}
+
+.hidden-ring.found {
+    transform: scale(2) translateY(-20px);
+    opacity: 0;
+}
+
+/* Corner Caricatures */
+.corner-img {
+    position: absolute;
+    z-index: -1; /* Behind the book */
+    opacity: 0.8;
+    pointer-events: none; 
+    mix-blend-mode: multiply;
+}
+.corner-tl { top: -40px; left: -40px; width: 120px; }
+.corner-tr { top: -30px; right: -50px; width: 140px; }
+.corner-bl { bottom: -40px; left: -30px; width: 150px; }
+.corner-br { bottom: -50px; right: -40px; width: 130px; }
+
+/* Finger Indicator */
+.finger-indicator {
+    position: absolute;
+    right: -20px; /* positioned relative to book container via JS or CSS */
+    bottom: 40px;
+    width: 50px;
+    height: 50px;
+    z-index: 50;
+    pointer-events: none;
+    animation: dragCorner 2.5s infinite ease-in-out;
+}
+.finger-indicator svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.2));
+}
+
+@keyframes dragCorner {
+    0% { transform: translate(0, 0) rotate(-15deg); opacity: 0; }
+    20% { transform: translate(0, 0) rotate(-15deg); opacity: 1; }
+    80% { transform: translate(-60px, -40px) rotate(-15deg); opacity: 1; }
+    100% { transform: translate(-60px, -40px) rotate(-15deg); opacity: 0; }
+}
+
+/* Main Book Container */
+.book-container {
+    position: relative;
+    z-index: 10; /* Above canvas and corners */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Allow canvas drawing */
+}
+
+/* The book element where StPageFlip attaches */
+#book {
+    pointer-events: auto; /* Re-enable pointer events for the book itself */
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+}
+
+.my-page {
+    background-color: var(--ivory);
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    overflow: hidden; /* Strict no scroll */
+    /* Inner shadow to simulate book binding */
+}
+/* Right-side pages binding */
+.my-page.--right {
+    box-shadow: inset 15px 0 20px rgba(0,0,0,0.05), inset -2px 0 5px rgba(255,255,255,0.8);
+}
+/* Left-side pages binding */
+.my-page.--left {
+    box-shadow: inset -15px 0 20px rgba(0,0,0,0.05), inset 2px 0 5px rgba(255,255,255,0.8);
+}
+
+/* Remove left pane shadow when book is closed on page 0 */
+#book[data-current-page="0"] .my-page.--left {
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+
+.page-content {
+    padding: 30px 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.center-content {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+h1, h2, .thank-you {
+    font-family: 'Great Vibes', cursive;
+    color: var(--gold);
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(212, 175, 55, 0.2);
+}
+
+h1 { font-size: 3rem; line-height: 1.1; }
+h2 { font-size: 2.2rem; }
+h3 { font-size: 1.4rem; margin-top: 10px; color: var(--rose); font-weight: 600; }
+
+.subtitle {
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 15px;
+}
+
+.illustration {
+    width: 100%;
+    max-width: 200px;
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 10px auto;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 3px solid var(--gold-light);
+    display: block;
+}
+
+.cover-img {
+    max-width: 250px;
+}
+
+.details, .family-details {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.family-details p {
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(212, 175, 55, 0.3);
+}
+.family-details p:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.family-name {
+    font-style: italic;
+    color: #888;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.map-placeholder {
+    width: 100%;
+    height: 150px;
+    background: #eaeaea;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    border-radius: 8px;
+    color: #888;
+    font-size: 0.9rem;
+    border: 1px dashed #ccc;
+}
+
+.invitation-text {
+    text-align: center;
+    line-height: 1.6;
+    font-size: 1rem;
+    margin: 15px 0;
+}
+
+/* Remove old buttons entirely */
+button.prev-btn, button.next-btn {
+    display: none;
+}
+
+/* Responsiveness adjustments */
+@media (max-width: 768px) {
+    .corner-img { width: 80px; }
+}
+
+@media (max-height: 600px) {
+    h1 { font-size: 2.2rem; }
+    h2 { font-size: 1.8rem; }
+    h3 { font-size: 1.2rem; }
+    .illustration { max-width: 150px; max-height: 180px;}
+    .page-content { padding: 15px; }
+}
