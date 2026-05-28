@@ -29,12 +29,22 @@
     justify-content: center;
     align-items: center;
     color: var(--rose);
-    box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     transition: background 0.3s, transform 0.3s;
 }
 .audio-btn:hover {
     background: rgba(255, 255, 255, 0.95);
     transform: scale(1.1);
+}
+
+@media (max-width: 600px) {
+    .audio-btn {
+        /* On mobile, move it down slightly to avoid the iPhone notch and URL bar, and make it larger so it floats visibly */
+        top: 60px;
+        right: 15px;
+        width: 50px;
+        height: 50px;
+    }
 }
 
 body {
@@ -219,11 +229,7 @@ body {
     background-color: var(--ivory);
     background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
     overflow: hidden; /* Strict no scroll */
-    /* Mobile Anti-Flicker (Hardware Acceleration) */
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
+    /* Inner shadow to simulate book binding */
 }
 /* Right-side pages binding */
 .my-page.--right {
@@ -246,9 +252,6 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    /* Mobile Anti-Flicker (Hardware Acceleration) */
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .center-content {
