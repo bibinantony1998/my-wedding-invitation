@@ -55,7 +55,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100dvh; /* Use dynamic viewport height to fix mobile browser navbar cutoffs */
+    min-height: 100dvh;
+    height: 100dvh; /* Fixed height for proper flex centering on mobile */
     overflow: hidden;
     position: relative;
 }
@@ -172,7 +173,7 @@ body {
 /* Main Book Container */
 .book-container {
     width: 100%;
-    height: 100vh;
+    height: 100dvh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -221,22 +222,22 @@ body {
 
 /* The book element where StPageFlip attaches */
 #book {
-    pointer-events: auto; /* Re-enable pointer events for the book itself */
-    /* Remove box shadow from here so empty pages don't cast shadows */
+    pointer-events: auto;
+    /* will-change hints to the browser to keep this on its own GPU layer */
+    will-change: transform;
 }
 
 .my-page {
     background-color: var(--ivory);
-    overflow: hidden; /* Strict no scroll */
-    /* Inner shadow to simulate book binding */
+    overflow: hidden;
 }
-/* Right-side pages binding */
+/* Right-side pages binding — shadows removed from flipping elements to prevent mobile GPU repaint flicker */
 .my-page.--right {
-    box-shadow: inset 15px 0 20px rgba(0,0,0,0.05), inset -2px 0 5px rgba(255,255,255,0.8), 5px 10px 20px rgba(0,0,0,0.15);
+    box-shadow: inset 15px 0 15px rgba(0,0,0,0.04);
 }
 /* Left-side pages binding */
 .my-page.--left {
-    box-shadow: inset -15px 0 20px rgba(0,0,0,0.05), inset 2px 0 5px rgba(255,255,255,0.8), -5px 10px 20px rgba(0,0,0,0.15);
+    box-shadow: inset -15px 0 15px rgba(0,0,0,0.04);
 }
 
 /* Remove left pane shadow when book is closed on page 0 */
