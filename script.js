@@ -61,7 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
         maxWidth: 450,
         minHeight: isMobile ? 500 : 400,
         maxHeight: isMobile ? 850 : 650,
-        maxShadowOpacity: 0.5,
+        maxShadowOpacity: isMobile ? 0.15 : 0.5,
+        drawShadow: !isMobile,
+        startZIndex: isMobile ? 20 : 0,
+        flippingTime: isMobile ? 700 : 1000,
         showCover: true,
         mobileScrollSupport: false,
         useMouseEvents: true
@@ -76,6 +79,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fix for the left shadow and binding string visibility on cover
     bookContainer.setAttribute('data-current-page', '0');
     
+    if (isMobile) {
+        const flipStates = new Set(['flipping', 'user_fold', 'fold_corner']);
+        pageFlip.on('changeState', (e) => {
+            bookContainer.classList.toggle('is-flipping', flipStates.has(e.data));
+        });
+    }
+
     pageFlip.on('flip', (e) => {
         bookContainer.setAttribute('data-current-page', e.data);
         

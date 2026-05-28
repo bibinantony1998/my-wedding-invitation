@@ -112,6 +112,8 @@ body {
 @media (max-width: 600px) {
     .book-container {
         padding: 5px; /* Minimal padding on mobile so it can stretch fully vertically */
+        /* Let St.PageFlip own 3D perspective — nested perspective causes z-order flicker */
+        perspective: none;
     }
     .page-content h1 {
         font-size: 2.5rem !important;
@@ -124,6 +126,31 @@ body {
         right: 10px;
         width: 30px;
         height: 30px;
+    }
+
+    /* St.PageFlip layer stability during fold animation */
+    .stf__item {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+
+    /* mix-blend-mode + filter force repaints during clip-path flips on iOS */
+    .book-container.is-flipping .page-corner-img,
+    .book-container.is-flipping .floral-divider {
+        mix-blend-mode: normal;
+        filter: none;
+        opacity: 0.85;
+    }
+
+    .book-container.is-flipping .illustration {
+        box-shadow: none;
+    }
+
+    .book-container.is-flipping .my-page.--right,
+    .book-container.is-flipping .my-page.--left {
+        box-shadow: none;
     }
 }
 
@@ -177,10 +204,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    perspective: 1500px;
     z-index: 10;
     position: relative;
     padding: 40px 15px; /* Ensures space around the book */
+}
+
+@media (min-width: 601px) {
+    .book-container {
+        perspective: 1500px;
+    }
 }
 
 /* Navigation Buttons */
@@ -223,8 +255,13 @@ body {
 /* The book element where StPageFlip attaches */
 #book {
     pointer-events: auto;
-    /* will-change hints to the browser to keep this on its own GPU layer */
-    will-change: transform;
+}
+
+@media (min-width: 601px) {
+    #book {
+        /* Desktop cover centering only — will-change on mobile fights flip layers */
+        will-change: transform;
+    }
 }
 
 .my-page {
