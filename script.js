@@ -61,13 +61,14 @@ document.addEventListener('DOMContentLoaded', function() {
         maxWidth: 450,
         minHeight: isMobile ? 500 : 400,
         maxHeight: isMobile ? 850 : 650,
-        maxShadowOpacity: isMobile ? 0.15 : 0.5,
-        drawShadow: !isMobile,
+        maxShadowOpacity: 0.5,
+        drawShadow: true,           // Keep library's canvas-drawn page-curl shadow on all devices
         startZIndex: isMobile ? 20 : 0,
         flippingTime: isMobile ? 700 : 1000,
         showCover: true,
         mobileScrollSupport: false,
-        useMouseEvents: true
+        useMouseEvents: !isMobile,  // Disable mouse events on touch devices
+        usePortrait: true           // CRITICAL: enables proper single-page portrait flip on mobile
     });
 
     // Load pages from HTML
