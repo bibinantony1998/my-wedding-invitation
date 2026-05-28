@@ -99,6 +99,9 @@ body {
 }
 
 @media (max-width: 600px) {
+    .book-container {
+        padding: 5px; /* Minimal padding on mobile so it can stretch fully vertically */
+    }
     .page-content h1 {
         font-size: 2.5rem !important;
     }

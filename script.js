@@ -50,15 +50,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    const isMobile = window.innerWidth <= 600;
+
     // 1. Initialize PageFlip
     const pageFlip = new St.PageFlip(bookEl, {
         width: 350, // base page width
-        height: 500, // base page height
+        height: isMobile ? 600 : 500, // Taller on mobile, normal on web
         size: "stretch",
         minWidth: 300,
         maxWidth: 450,
-        minHeight: 400,
-        maxHeight: 650,
+        minHeight: isMobile ? 500 : 400,
+        maxHeight: isMobile ? 850 : 650,
         maxShadowOpacity: 0.5,
         showCover: true,
         mobileScrollSupport: false,
@@ -289,55 +291,4 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCountdown();
         setInterval(updateCountdown, 1000);
     }
-
-    // 5. Global Horizontal Swipe Handler (Instant trigger on move)
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let isSwiping = false;
-
-    const handleSwipeStart = (x, y) => {
-        touchStartX = x;
-        touchStartY = y;
-        isSwiping = true;
-    };
-
-    const handleSwipeMove = (x, y) => {
-        if (!isSwiping) return;
-        
-        const xDiff = x - touchStartX;
-        const yDiff = y - touchStartY;
-        
-        // Instant flip as soon as the finger/mouse moves 30px horizontally
-        if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > 30) {
-            isSwiping = false; // Stop tracking this swipe to prevent rapid-fire flips
-            if (xDiff < 0) {
-                pageFlip.flipNext(); // Swiped Left
-            } else {
-                pageFlip.flipPrev(); // Swiped Right
-            }
-        }
-    };
-
-    const handleSwipeEnd = () => {
-        isSwiping = false;
-    };
-
-    // Mobile Touch Events
-    bookContainer.addEventListener('touchstart', (e) => handleSwipeStart(e.changedTouches[0].screenX, e.changedTouches[0].screenY), { passive: true });
-    bookContainer.addEventListener('touchmove', (e) => handleSwipeMove(e.changedTouches[0].screenX, e.changedTouches[0].screenY), { passive: true });
-    bookContainer.addEventListener('touchend', handleSwipeEnd, { passive: true });
-
-    // Desktop Mouse Events (so you can drag-to-swipe anywhere on the screen)
-    let isMouseDown = false;
-    bookContainer.addEventListener('mousedown', (e) => {
-        isMouseDown = true;
-        handleSwipeStart(e.screenX, e.screenY);
-    });
-    window.addEventListener('mousemove', (e) => {
-        if (isMouseDown) handleSwipeMove(e.screenX, e.screenY);
-    });
-    window.addEventListener('mouseup', () => {
-        isMouseDown = false;
-        handleSwipeEnd();
-    });
 });
