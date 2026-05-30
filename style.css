@@ -39,11 +39,19 @@
 
 @media (max-width: 600px) {
     .audio-btn {
-        /* On mobile, move it down slightly to avoid the iPhone notch and URL bar, and make it larger so it floats visibly */
-        top: 60px;
-        right: 15px;
-        width: 50px;
-        height: 50px;
+        /* Small, tucked into top-right corner — never overlaps the book */
+        top: 12px;
+        right: 12px;
+        bottom: auto;
+        left: auto;
+        width: 32px;
+        height: 32px;
+        opacity: 0.75;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .audio-btn svg {
+        width: 16px;
+        height: 16px;
     }
 }
 
@@ -110,47 +118,33 @@ body {
 }
 
 @media (max-width: 600px) {
+    /*
+     * Portrait mode: StPageFlip shows one full-width page at a time.
+     * The book is always centered — no shifting needed for cover/open states.
+     */
     .book-container {
-        padding: 5px; /* Minimal padding on mobile so it can stretch fully vertically */
-        /* Let St.PageFlip own 3D perspective — nested perspective causes z-order flicker */
-        perspective: none;
+        padding: 0 24px;   /* slight side breathing room */
+        overflow: clip;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
     }
-    .page-content h1 {
-        font-size: 2.5rem !important;
+
+    /* No shifting — portrait mode keeps the single page centered always */
+    #book {
+        width: 100%;
+        max-width: 100%;
+        overflow: visible;
     }
-    .page-content h2 {
-        font-size: 1.8rem !important;
-    }
+
+    .page-content h1 { font-size: 2.5rem !important; }
+    .page-content h2 { font-size: 1.8rem !important; }
+
     .finger-indicator {
         bottom: 10px;
         right: 10px;
         width: 30px;
         height: 30px;
-    }
-
-    /* St.PageFlip layer stability during fold animation */
-    .stf__item {
-        -webkit-backface-visibility: hidden;
-        backface-visibility: hidden;
-        -webkit-transform: translateZ(0);
-        transform: translateZ(0);
-    }
-
-    /* mix-blend-mode + filter force repaints during clip-path flips on iOS */
-    .book-container.is-flipping .page-corner-img,
-    .book-container.is-flipping .floral-divider {
-        mix-blend-mode: normal;
-        filter: none;
-        opacity: 0.85;
-    }
-
-    .book-container.is-flipping .illustration {
-        box-shadow: none;
-    }
-
-    .book-container.is-flipping .my-page.--right,
-    .book-container.is-flipping .my-page.--left {
-        box-shadow: none;
     }
 }
 
@@ -173,6 +167,23 @@ body {
     width: 40px;
     height: 40px;
     filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.2));
+}
+
+/* On mobile: compact icon-only, no bulky text */
+@media (max-width: 600px) {
+    .finger-indicator {
+        width: 36px;
+        height: 36px;
+        bottom: 14px;
+        right: 14px;
+    }
+    .finger-indicator svg {
+        width: 28px;
+        height: 28px;
+    }
+    .swipe-text {
+        display: none; /* Hide label on mobile — icon alone is clear enough */
+    }
 }
 .swipe-text {
     font-family: 'Outfit', sans-serif;
@@ -246,8 +257,8 @@ body {
     opacity: 0;
     pointer-events: none;
 }
-/* Hide next button on back cover (7) */
-.book-container[data-current-page="7"] .next-btn {
+/* Hide next button on last spread / back cover */
+.book-container.is-back-cover .next-btn {
     opacity: 0;
     pointer-events: none;
 }

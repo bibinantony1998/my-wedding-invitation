@@ -2,13 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const bookContainer = document.querySelector('.book-container');
     const bookEl = document.getElementById('book');
     
-    // Mobile tweak: Strip hard page density so covers fold like normal paper and don't slide
-    if (window.innerWidth <= 600) {
-        document.querySelectorAll('.my-page[data-density="hard"]').forEach(page => {
-            page.removeAttribute('data-density');
-        });
-    }
-    
     // Audio Initialization
     const bgMusic = document.getElementById('bgMusic');
     const flipSound = document.getElementById('flipSound');
@@ -51,31 +44,55 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const isMobile = window.innerWidth <= 600;
+    // Portrait mode on mobile: one full-width page, with 12px padding each side
+    const mobilePad = 12;
+    const mobilePageW = isMobile ? window.innerWidth - mobilePad * 2 : 350;
+    const mobilePageH = isMobile ? Math.floor(window.innerHeight * 0.92) : 500;
 
     // 1. Initialize PageFlip
     const pageFlip = new St.PageFlip(bookEl, {
-        width: 350, // base page width
-        height: isMobile ? 600 : 500, // Taller on mobile, normal on web
-        size: "stretch",
-        minWidth: 300,
-        maxWidth: 450,
-        minHeight: isMobile ? 500 : 400,
-        maxHeight: isMobile ? 850 : 650,
+        width:     isMobile ? mobilePageW : 350,
+        height:    isMobile ? mobilePageH : 500,
+        size:      isMobile ? 'fixed'     : 'stretch',
+        minWidth:  isMobile ? mobilePageW : 300,
+        maxWidth:  isMobile ? mobilePageW : 450,
+        minHeight: isMobile ? mobilePageH : 400,
+        maxHeight: isMobile ? mobilePageH : 650,
         maxShadowOpacity: 0.5,
-        drawShadow: true,           // Keep library's canvas-drawn page-curl shadow on all devices
-        startZIndex: isMobile ? 20 : 0,
+        drawShadow: true,
+        startZIndex: isMobile ? 10 : 0,
         flippingTime: isMobile ? 700 : 1000,
         showCover: true,
         mobileScrollSupport: false,
-        useMouseEvents: !isMobile,  // Disable mouse events on touch devices
-        usePortrait: true           // CRITICAL: enables proper single-page portrait flip on mobile
+        useMouseEvents: true,   // Must be true — controls touch drag on mobile too
+        usePortrait: true       // Portrait: one full-width page at a time on mobile
     });
+
+    let mobileResizeTimer;
+    function onMobileResize() {
+        if (!isMobile) return;
+        clearTimeout(mobileResizeTimer);
+        mobileResizeTimer = setTimeout(() => {
+            const half = Math.floor(window.innerWidth / 2);
+            pageFlip.getSettings().width = half;
+            pageFlip.getSettings().minWidth = half;
+            pageFlip.getSettings().maxWidth = half;
+            pageFlip.getSettings().height = Math.floor(window.innerHeight * 0.92);
+            pageFlip.update();
+        }, 120);
+    }
 
     // Load pages from HTML
     pageFlip.loadFromHTML(document.querySelectorAll('.my-page'));
     
     // Set initial cover state
     bookContainer.classList.add('is-cover');
+
+    // Pin exact pixel half-page offset so CSS transforms use px not vw/% (avoids iOS Safari vw != innerWidth)
+    if (isMobile) {
+        const halfPx = mobilePageW; // mobilePageW = innerWidth/2 = one page width
+        document.documentElement.style.setProperty('--page-half', `${halfPx}px`);
+    }
 
     // Fix for the left shadow and binding string visibility on cover
     bookContainer.setAttribute('data-current-page', '0');
@@ -85,15 +102,34 @@ document.addEventListener('DOMContentLoaded', function() {
         pageFlip.on('changeState', (e) => {
             bookContainer.classList.toggle('is-flipping', flipStates.has(e.data));
         });
+        window.addEventListener('resize', onMobileResize);
+
+        // Touch swipe handler — ensures left/right swipe always flips on mobile
+        let touchStartX = 0;
+        let touchStartY = 0;
+        bookContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+        bookContainer.addEventListener('touchend', (e) => {
+            const dx = e.changedTouches[0].screenX - touchStartX;
+            const dy = e.changedTouches[0].screenY - touchStartY;
+            // Only trigger if horizontal swipe is dominant and at least 40px
+            if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+                if (dx < 0) pageFlip.flipNext();
+                else        pageFlip.flipPrev();
+            }
+        }, { passive: true });
     }
 
     pageFlip.on('flip', (e) => {
         bookContainer.setAttribute('data-current-page', e.data);
         
-        // Dynamic Book Centering
+        // Dynamic Book Centering (last spread reports left page index, not last page)
         const totalPages = pageFlip.getPageCount();
         bookContainer.classList.toggle('is-cover', e.data === 0);
-        bookContainer.classList.toggle('is-back-cover', e.data === totalPages - 1);
+        bookContainer.classList.toggle('is-back-cover', e.data >= totalPages - 2);
+        bookContainer.classList.toggle('is-open', e.data > 0 && e.data < totalPages - 2);
         
         // Play flip sound
         if (userHasInteracted) {
