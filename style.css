@@ -146,6 +146,28 @@ body {
         width: 30px;
         height: 30px;
     }
+
+    /*
+     * Anti-flicker during page flip:
+     *
+     * mix-blend-mode and filter on elements INSIDE a flipping 3D page prevent
+     * the browser from isolating that page on its own GPU compositor layer.
+     * The GPU has to blend with surrounding pixels every frame → flicker.
+     *
+     * Fix: while the flip is active (is-flipping class set by JS changeState event),
+     * neutralise those properties so each page becomes a flat composited layer.
+     * will-change:transform pre-promotes the page element to the GPU before the
+     * animation starts, eliminating the first-frame flash.
+     */
+    .book-container.is-flipping .my-page {
+        will-change: transform;
+    }
+    .book-container.is-flipping .page-corner-img,
+    .book-container.is-flipping .floral-divider {
+        mix-blend-mode: normal !important;
+        filter: none !important;
+        opacity: 0 !important; /* hide briefly during flip — too small to notice */
+    }
 }
 
 /* Finger Indicator */
