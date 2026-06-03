@@ -1,9 +1,55 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // 0. Asset Preloader Logic
+    const preloader = document.getElementById('preloader');
+    const assetsToLoad = [
+        'assets/book_bg.webp',
+        'assets/bride_solo.webp',
+        'assets/caricature_bl.webp',
+        'assets/caricature_br.webp',
+        'assets/caricature_tl.webp',
+        'assets/caricature_tr.webp',
+        'assets/cover_couple.webp',
+        'assets/final_couple.webp',
+        'assets/floral_divider.webp',
+        'assets/groom_solo.webp'
+    ];
+
+    const loadPromises = assetsToLoad.map(src => {
+        return new Promise(resolve => {
+            const img = new Image();
+            img.src = src;
+            img.onload = resolve;
+            img.onerror = resolve; // Resolve on error so it doesn't block
+        });
+    });
+
+    // Also wait for background music (fallback to 1.5s max to prevent blocking on slow connections or mobile restrictions)
+    const bgMusic = document.getElementById('bgMusic');
+    if (bgMusic) {
+        loadPromises.push(new Promise(resolve => {
+            if (bgMusic.readyState >= 3) {
+                resolve();
+            } else {
+                bgMusic.addEventListener('canplaythrough', resolve, { once: true });
+                bgMusic.addEventListener('error', resolve, { once: true });
+                setTimeout(resolve, 1500); 
+            }
+        }));
+    }
+
+    Promise.all(loadPromises).then(() => {
+        if (preloader) {
+            preloader.classList.add('hidden');
+            setTimeout(() => {
+                preloader.style.display = 'none';
+            }, 800); // Matches CSS transition duration
+        }
+    });
+
     const bookContainer = document.querySelector('.book-container');
     const bookEl = document.getElementById('book');
     
     // Audio Initialization
-    const bgMusic = document.getElementById('bgMusic');
     const flipSound = document.getElementById('flipSound');
     const audioToggle = document.getElementById('audioToggle');
     const iconMuted = document.getElementById('icon-muted');
