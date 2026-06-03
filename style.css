@@ -299,6 +299,10 @@ body {
 
 .my-page {
     background-color: var(--ivory);
+    background-image: url('assets/book_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     overflow: hidden;
 }
 /* Right-side pages binding — shadows removed from flipping elements to prevent mobile GPU repaint flicker */
