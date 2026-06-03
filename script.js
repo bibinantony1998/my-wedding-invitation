@@ -175,23 +175,53 @@ document.addEventListener('DOMContentLoaded', function() {
             this.baseAlpha = Math.random() * 0.6 + 0.4; // Increased visibility
             this.alpha = this.baseAlpha;
             this.life = isBurst ? Math.random() * 60 + 40 : Infinity; // Burst particles die
+            
+            this.angle = Math.random() * Math.PI * 2;
+            this.spin = (Math.random() - 0.5) * 0.05;
         }
 
         draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = this.color;
+            ctx.save();
+            ctx.translate(this.x, this.y);
+            ctx.rotate(this.angle);
             ctx.globalAlpha = this.alpha;
-            ctx.fill();
+            ctx.fillStyle = this.color;
             
             // Add a subtle glow
-            ctx.shadowBlur = 10;
+            ctx.shadowBlur = 3;
             ctx.shadowColor = this.color;
-            ctx.globalAlpha = 1; // Reset for other drawing
-            ctx.shadowBlur = 0;
+            
+            // Draw 5 petals
+            const numPetals = 5;
+            const petalDistance = this.size * 0.8;
+            const petalRadius = this.size * 0.6;
+            
+            for (let i = 0; i < numPetals; i++) {
+                ctx.beginPath();
+                const angle = (i * Math.PI * 2) / numPetals;
+                const px = Math.cos(angle) * petalDistance;
+                const py = Math.sin(angle) * petalDistance;
+                ctx.arc(px, py, petalRadius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            // Draw center
+            ctx.beginPath();
+            ctx.arc(0, 0, this.size * 0.5, 0, Math.PI * 2);
+            if (this.color === '#ffffff') {
+                // Give white flowers a gold center ring so it doesn't blend in
+                ctx.fillStyle = '#d4af37'; 
+            } else {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            }
+            ctx.fill();
+            
+            ctx.restore();
         }
 
         update() {
+            this.angle += this.spin;
+            
             // Mouse interaction
             const dx = mouse.x - this.x;
             const dy = mouse.y - this.y;
