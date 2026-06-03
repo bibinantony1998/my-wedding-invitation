@@ -97,11 +97,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fix for the left shadow and binding string visibility on cover
     bookContainer.setAttribute('data-current-page', '0');
     
-    if (isMobile) {
-        const flipStates = new Set(['flipping', 'user_fold', 'fold_corner']);
-        pageFlip.on('changeState', (e) => {
+    let flipSoundPlayed = false;
+    pageFlip.on('changeState', (e) => {
+        if (isMobile) {
+            const flipStates = new Set(['flipping', 'user_fold', 'fold_corner']);
             bookContainer.classList.toggle('is-flipping', flipStates.has(e.data));
-        });
+        }
+        
+        // Play flip sound immediately when flip starts
+        if (e.data === 'flipping' || e.data === 'user_fold') {
+            if (userHasInteracted && !flipSoundPlayed) {
+                flipSound.currentTime = 0;
+                flipSound.play().catch(err => console.log(err));
+                flipSoundPlayed = true;
+            }
+        } else if (e.data === 'read') {
+            flipSoundPlayed = false; // Reset when page is resting
+        }
+    });
+    
+    if (isMobile) {
         window.addEventListener('resize', onMobileResize);
     }
 
@@ -113,12 +128,6 @@ document.addEventListener('DOMContentLoaded', function() {
         bookContainer.classList.toggle('is-cover', e.data === 0);
         bookContainer.classList.toggle('is-back-cover', e.data >= totalPages - 2);
         bookContainer.classList.toggle('is-open', e.data > 0 && e.data < totalPages - 2);
-        
-        // Play flip sound
-        if (userHasInteracted) {
-            flipSound.currentTime = 0;
-            flipSound.play().catch(err => console.log(err));
-        }
         
         // Hide the finger animation on interaction
         const fingerIndicator = document.getElementById('fingerIndicator');
