@@ -299,7 +299,7 @@ body {
 
 .my-page {
     background-color: var(--ivory);
-    background-image: url('assets/book_bg.jpg');
+    background-image: url('assets/book_bg.webp');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
