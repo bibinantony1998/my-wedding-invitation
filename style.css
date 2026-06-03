@@ -123,7 +123,7 @@ body {
      * The book is always centered — no shifting needed for cover/open states.
      */
     .book-container {
-        padding: 0 24px;   /* slight side breathing room */
+        padding: 5px; /* Minimal padding on mobile so it can stretch fully vertically */
         overflow: clip;
         justify-content: center;
         align-items: center;
@@ -305,13 +305,13 @@ body {
     background-repeat: no-repeat;
     overflow: hidden;
 }
-/* Right-side pages binding — shadows removed from flipping elements to prevent mobile GPU repaint flicker */
+/* Right-side pages binding */
 .my-page.--right {
-    box-shadow: inset 15px 0 15px rgba(0,0,0,0.04);
+    box-shadow: inset 18px 0 25px rgba(0,0,0,0.15), inset -2px 0 5px rgba(255,255,255,0.4);
 }
 /* Left-side pages binding */
 .my-page.--left {
-    box-shadow: inset -15px 0 15px rgba(0,0,0,0.04);
+    box-shadow: inset -18px 0 25px rgba(0,0,0,0.15), inset 2px 0 5px rgba(255,255,255,0.4);
 }
 
 /* Remove left pane shadow when book is closed on page 0 */
