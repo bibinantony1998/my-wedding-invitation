@@ -397,11 +397,12 @@ h3 { font-size: 1.4rem; margin-top: 10px; color: var(--rose); font-weight: 600; 
 }
 
 .family-name {
+    font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     color: #888;
     margin-bottom: 10px;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
 }
 
 .map-link-box {
@@ -430,9 +431,10 @@ h3 { font-size: 1.4rem; margin-top: 10px; color: var(--rose); font-weight: 600; 
 }
 
 .invitation-text {
+    font-family: 'Cormorant Garamond', serif;
     text-align: center;
     line-height: 1.6;
-    font-size: 1rem;
+    font-size: 1.1rem;
     margin: 15px 0;
 }
 
