@@ -384,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 4. Countdown Timer Logic
     const countdownEl = document.getElementById('countdown');
     if (countdownEl) {
-        const weddingDate = new Date("Dec 27, 2026 12:00:00").getTime();
+        const weddingDate = new Date("Dec 28, 2026 14:00:00").getTime();
         
         const updateCountdown = () => {
             const now = new Date().getTime();

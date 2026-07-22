@@ -503,6 +503,7 @@ button.prev-btn, button.next-btn {
     justify-content: center;
     width: 100%;
     margin-bottom: 15px;
+    gap: 20px;
 }
 .schedule .event {
     display: flex;
