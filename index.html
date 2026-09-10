@@ -79,7 +79,69 @@
                 <div class="page-content center-content cover-page">
                     <h1>Bibin & Stella</h1>
                     <p class="subtitle">Are getting married</p>
-                    <img src="assets/cover_couple.png" alt="Bibin and Stella" class="illustration cover-img">
+                    <!-- Wedding Rings Monogram Ornament -->
+                    <div class="cover-ornament" aria-label="Wedding rings ornament">
+                        <svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg" class="cover-ornament-svg">
+                            <defs>
+                                <!--
+                                    Ring geometry:
+                                    Gold (left):  cx=82, cy=90, r=34  → right edge ≈116
+                                    Rose (right): cx=118, cy=90, r=34 → left edge  ≈84
+                                    Distance = 36. Intersection points: (100, 61) and (100, 119)
+
+                                    Interlocking rule:
+                                      Gold ring passes OVER rose at the TOP (above y=90)
+                                      Rose ring passes OVER gold at the BOTTOM (below y=90)
+
+                                    Strategy: draw rose ring TWICE
+                                      1st draw (behind gold): clipped to EXCLUDE bottom-center overlap
+                                      2nd draw (in front of gold): clipped to ONLY the bottom-center overlap
+                                    Gold ring is drawn in the middle — naturally over the 1st rose layer.
+                                -->
+
+                                <!-- Bottom-center overlap area: where rose ring goes IN FRONT of gold -->
+                                <clipPath id="roseInFront">
+                                    <rect x="84" y="90" width="32" height="30" />
+                                </clipPath>
+
+                                <!-- Everything except the bottom-center overlap: where rose is BEHIND gold -->
+                                <clipPath id="roseBehind">
+                                    <path
+                                        d="M0,0 H200 V90 H84 V120 H0 Z M116,90 H200 V120 H116 Z M0,120 H200 V170 H0 Z" />
+                                </clipPath>
+                            </defs>
+
+                            <!-- ── Top ornament ── -->
+                            <line x1="58" y1="22" x2="88" y2="22" stroke="#d4af37" stroke-width="0.9" opacity="0.65" />
+                            <polygon points="100,13 105,22 100,31 95,22" fill="#d4af37" opacity="0.9" />
+                            <line x1="112" y1="22" x2="142" y2="22" stroke="#d4af37" stroke-width="0.9"
+                                opacity="0.65" />
+
+                            <!-- ── Layer 1: Rose ring BEHIND gold (most of the ring) ── -->
+                            <circle cx="118" cy="90" r="34" fill="none" stroke="#b76e79" stroke-width="7"
+                                clip-path="url(#roseBehind)" />
+
+                            <!-- ── Layer 2: Gold ring (fully on top of rose in the overlap zone top) ── -->
+                            <circle cx="82" cy="90" r="34" fill="none" stroke="#d4af37" stroke-width="7" />
+
+                            <!-- ── Diamond gem on gold ring (at top of ring) ── -->
+                            <polygon points="82,50 87,57 82,64 77,57" fill="#f5e6a3" stroke="#c8a020"
+                                stroke-width="1.5" />
+                            <line x1="79.5" y1="54.5" x2="84" y2="53" stroke="rgba(255,255,255,0.85)"
+                                stroke-width="0.9" />
+
+                            <!-- ── Layer 3: Rose ring IN FRONT of gold at bottom (creates the interlock) ── -->
+                            <circle cx="118" cy="90" r="34" fill="none" stroke="#b76e79" stroke-width="7"
+                                clip-path="url(#roseInFront)" />
+
+                            <!-- ── Bottom ornament ── -->
+                            <line x1="70" y1="140" x2="130" y2="140" stroke="#d4af37" stroke-width="0.7"
+                                opacity="0.5" />
+                            <circle cx="89" cy="140" r="1.8" fill="#d4af37" opacity="0.65" />
+                            <circle cx="100" cy="140" r="2.5" fill="#d4af37" opacity="0.9" />
+                            <circle cx="111" cy="140" r="1.8" fill="#d4af37" opacity="0.65" />
+                        </svg>
+                    </div>
                     <img src="assets/floral_divider.webp" alt="Ornament" class="floral-divider">
                 </div>
             </div>
@@ -105,7 +167,47 @@
                     <p class="romantic-quote"
                         style="font-size: 1rem; margin-top: 4px; margin-bottom: 18px; opacity: 0.7;">joyfully invite you
                         to witness<br>their union in holy matrimony</p>
-                    <img src="assets/final_couple.webp" alt="Bibin and Stella" class="illustration">
+                    <!-- Ornate Wreath with Intertwined Initials -->
+                    <div class="invite-wreath" aria-label="Ornamental wreath">
+                        <svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" class="invite-wreath-svg">
+                            <!-- Wreath leaves - left arc -->
+                            <g fill="#d4af37" opacity="0.55">
+                                <ellipse cx="38" cy="90" rx="10" ry="5" transform="rotate(-30 38 90)" />
+                                <ellipse cx="44" cy="68" rx="10" ry="5" transform="rotate(-55 44 68)" />
+                                <ellipse cx="57" cy="50" rx="10" ry="5" transform="rotate(-75 57 50)" />
+                                <ellipse cx="75" cy="38" rx="10" ry="5" transform="rotate(-90 75 38)" />
+                                <ellipse cx="44" cy="112" rx="10" ry="5" transform="rotate(-10 44 112)" />
+                                <ellipse cx="56" cy="130" rx="10" ry="5" transform="rotate(15 56 130)" />
+                                <ellipse cx="73" cy="143" rx="10" ry="5" transform="rotate(35 73 143)" />
+                            </g>
+                            <!-- Wreath leaves - right arc -->
+                            <g fill="#b76e79" opacity="0.5">
+                                <ellipse cx="142" cy="90" rx="10" ry="5" transform="rotate(30 142 90)" />
+                                <ellipse cx="136" cy="68" rx="10" ry="5" transform="rotate(55 136 68)" />
+                                <ellipse cx="123" cy="50" rx="10" ry="5" transform="rotate(75 123 50)" />
+                                <ellipse cx="105" cy="38" rx="10" ry="5" transform="rotate(90 105 38)" />
+                                <ellipse cx="136" cy="112" rx="10" ry="5" transform="rotate(10 136 112)" />
+                                <ellipse cx="124" cy="130" rx="10" ry="5" transform="rotate(-15 124 130)" />
+                                <ellipse cx="107" cy="143" rx="10" ry="5" transform="rotate(-35 107 143)" />
+                            </g>
+                            <!-- Ribbon bow at bottom -->
+                            <path
+                                d="M80 152 C72 148, 64 152, 68 158 C72 164, 80 160, 90 156 C100 160, 108 164, 112 158 C116 152, 108 148, 100 152 L90 156Z"
+                                fill="#b76e79" opacity="0.6" />
+                            <!-- Central circle frame -->
+                            <circle cx="90" cy="90" r="42" fill="rgba(255,255,240,0.85)" stroke="#d4af37"
+                                stroke-width="1.5" />
+                            <circle cx="90" cy="90" r="36" fill="none" stroke="#d4af37" stroke-width="0.5"
+                                opacity="0.5" />
+                            <!-- Intertwined B & S -->
+                            <text x="90" y="100" text-anchor="middle" font-family="'Great Vibes', cursive"
+                                font-size="42" fill="#d4af37">B&amp;S</text>
+                            <!-- Star accents top -->
+                            <polygon
+                                points="90,26 91.5,30 95,30 92.5,32.5 93.5,36 90,33.5 86.5,36 87.5,32.5 85,30 88.5,30"
+                                fill="#d4af37" opacity="0.7" />
+                        </svg>
+                    </div>
                     <img src="assets/floral_divider.webp" alt="" class="floral-divider" style="opacity: 0.5;">
                     <p style="font-size: 0.82rem; letter-spacing: 0.12em; color: var(--rose); margin-top: 10px;">28
                         &middot; DECEMBER &middot; 2026</p>
@@ -151,21 +253,60 @@
                 <div class="page-content center-content" style="gap: 0; padding: 20px 18px;">
                     <div
                         style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; justify-content: center; width: 100%;">
+                        <!-- Groom Monogram Card -->
                         <div style="flex: 1; text-align: center;">
-                            <img src="assets/groom_solo.webp" alt="Bibin" class="illustration"
-                                style="width: 100%; max-width: 130px; margin: 0 auto;">
+                            <div class="portrait-medallion" aria-label="Bibin's monogram">
+                                <svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" width="110" height="110">
+                                    <!-- Outer circle frame -->
+                                    <circle cx="55" cy="55" r="50" fill="rgba(255,255,240,0.92)" stroke="#d4af37"
+                                        stroke-width="2.5" />
+                                    <!-- Inner decorative ring -->
+                                    <circle cx="55" cy="55" r="43" fill="none" stroke="#d4af37" stroke-width="0.8"
+                                        opacity="0.55" />
+                                    <!-- Four small dot ornaments at compass points (inside frame) -->
+                                    <circle cx="55" cy="9" r="2.5" fill="#d4af37" opacity="0.75" />
+                                    <circle cx="55" cy="101" r="2.5" fill="#d4af37" opacity="0.75" />
+                                    <circle cx="9" cy="55" r="2.5" fill="#d4af37" opacity="0.75" />
+                                    <circle cx="101" cy="55" r="2.5" fill="#d4af37" opacity="0.75" />
+                                    <!-- Initial -->
+                                    <text x="52" y="73" text-anchor="middle" font-family="'Great Vibes', cursive"
+                                        font-size="58" fill="#d4af37">B</text>
+                                    <!-- Thin underline with centre dot -->
+                                    <line x1="35" y1="84" x2="75" y2="84" stroke="#d4af37" stroke-width="0.9"
+                                        opacity="0.55" />
+                                    <circle cx="55" cy="84" r="1.8" fill="#d4af37" opacity="0.7" />
+                                </svg>
+                            </div>
                             <h3 style="font-size: 1.1rem; margin: 6px 0 2px;">Bibin</h3>
                             <p class="family-name" style="font-size: 0.72rem;">Son of Antony &amp; Selin</p>
                         </div>
-                        <div style="flex: 0 0 auto; text-align: center; padding-top: 60px;">
+                        <div style="flex: 0 0 auto; text-align: center; padding-top: 40px;">
                             <p class="romantic-quote" style="font-size: 2rem; color: var(--rose); line-height: 1;">&amp;
                             </p>
                         </div>
+                        <!-- Bride Monogram Card -->
                         <div style="flex: 1; text-align: center;">
-                            <div class="illustration"
-                                style="width: 100%; max-width: 130px; margin: 0 auto; aspect-ratio: 1/1; position: relative; overflow: hidden; padding: 0;">
-                                <img src="assets/bride_solo.webp" alt="Stella"
-                                    style="position: absolute; top: 50%; left: 50%; width: 135%; height: 135%; object-fit: cover; transform: translate(-50%, -45%);">
+                            <div class="portrait-medallion" aria-label="Stella's monogram">
+                                <svg viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg" width="110" height="110">
+                                    <!-- Outer circle frame -->
+                                    <circle cx="55" cy="55" r="50" fill="rgba(255,255,240,0.92)" stroke="#b76e79"
+                                        stroke-width="2.5" />
+                                    <!-- Inner decorative ring -->
+                                    <circle cx="55" cy="55" r="43" fill="none" stroke="#b76e79" stroke-width="0.8"
+                                        opacity="0.55" />
+                                    <!-- Four small dot ornaments at compass points (inside frame) -->
+                                    <circle cx="55" cy="9" r="2.5" fill="#b76e79" opacity="0.75" />
+                                    <circle cx="55" cy="101" r="2.5" fill="#b76e79" opacity="0.75" />
+                                    <circle cx="9" cy="55" r="2.5" fill="#b76e79" opacity="0.75" />
+                                    <circle cx="101" cy="55" r="2.5" fill="#b76e79" opacity="0.75" />
+                                    <!-- Initial -->
+                                    <text x="51" y="75" text-anchor="middle" font-family="'Great Vibes', cursive"
+                                        font-size="58" fill="#b76e79">S</text>
+                                    <!-- Thin underline with centre dot -->
+                                    <line x1="35" y1="84" x2="75" y2="84" stroke="#b76e79" stroke-width="0.9"
+                                        opacity="0.55" />
+                                    <circle cx="55" cy="84" r="1.8" fill="#b76e79" opacity="0.7" />
+                                </svg>
                             </div>
                             <h3 style="font-size: 1.1rem; margin: 6px 0 2px;">Stella</h3>
                             <p class="family-name" style="font-size: 0.72rem;">Daughter of Thankachan &amp; Tessy</p>

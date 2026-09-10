@@ -602,6 +602,46 @@ button.prev-btn, button.next-btn {
     opacity: 0.7;
 }
 
+/* --- SVG Ornamental Elements (replaces colored images) --- */
+.cover-ornament {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px auto;
+    filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.2));
+}
+.cover-ornament-svg {
+    width: 200px;
+    height: 160px;
+    max-width: 240px;
+}
+
+.invite-wreath {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 6px auto;
+    filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.18));
+}
+.invite-wreath-svg {
+    width: 160px;
+    height: 160px;
+    max-width: 190px;
+}
+
+.portrait-medallion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 4px;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.1));
+}
+
+@media (max-height: 600px) {
+    .cover-ornament-svg { width: 150px; height: 120px; }
+    .invite-wreath-svg { width: 120px; height: 120px; }
+}
+
 /* --- Romantic Quote Page --- */
 .romantic-quote {
     font-family: 'Great Vibes', cursive;
