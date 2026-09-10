@@ -63,10 +63,10 @@
         </button>
 
         <div id="book">
-            <!-- Cover (Hard) -->
+            <!-- Cover (Hard) — Invitation + Wreath -->
             <div class="my-page" data-density="hard">
 
-                <!-- Finger Indicator now sits directly on the cover page -->
+                <!-- Finger Indicator -->
                 <div class="finger-indicator" id="fingerIndicator">
                     <span class="swipe-text">Swipe to open</span>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -76,89 +76,6 @@
                     </svg>
                 </div>
 
-                <div class="page-content center-content cover-page">
-                    <h1>Bibin & Stella</h1>
-                    <p class="subtitle">Are getting married</p>
-                    <!-- Wedding Rings Monogram Ornament -->
-                    <div class="cover-ornament" aria-label="Wedding rings ornament">
-                        <svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg" class="cover-ornament-svg">
-                            <defs>
-                                <!--
-                                    Ring geometry:
-                                    Gold (left):  cx=82, cy=90, r=34  → right edge ≈116
-                                    Rose (right): cx=118, cy=90, r=34 → left edge  ≈84
-                                    Distance = 36. Intersection points: (100, 61) and (100, 119)
-
-                                    Interlocking rule:
-                                      Gold ring passes OVER rose at the TOP (above y=90)
-                                      Rose ring passes OVER gold at the BOTTOM (below y=90)
-
-                                    Strategy: draw rose ring TWICE
-                                      1st draw (behind gold): clipped to EXCLUDE bottom-center overlap
-                                      2nd draw (in front of gold): clipped to ONLY the bottom-center overlap
-                                    Gold ring is drawn in the middle — naturally over the 1st rose layer.
-                                -->
-
-                                <!-- Bottom-center overlap area: where rose ring goes IN FRONT of gold -->
-                                <clipPath id="roseInFront">
-                                    <rect x="84" y="90" width="32" height="30" />
-                                </clipPath>
-
-                                <!-- Everything except the bottom-center overlap: where rose is BEHIND gold -->
-                                <clipPath id="roseBehind">
-                                    <path
-                                        d="M0,0 H200 V90 H84 V120 H0 Z M116,90 H200 V120 H116 Z M0,120 H200 V170 H0 Z" />
-                                </clipPath>
-                            </defs>
-
-                            <!-- ── Top ornament ── -->
-                            <line x1="58" y1="22" x2="88" y2="22" stroke="#d4af37" stroke-width="0.9" opacity="0.65" />
-                            <polygon points="100,13 105,22 100,31 95,22" fill="#d4af37" opacity="0.9" />
-                            <line x1="112" y1="22" x2="142" y2="22" stroke="#d4af37" stroke-width="0.9"
-                                opacity="0.65" />
-
-                            <!-- ── Layer 1: Rose ring BEHIND gold (most of the ring) ── -->
-                            <circle cx="118" cy="90" r="34" fill="none" stroke="#b76e79" stroke-width="7"
-                                clip-path="url(#roseBehind)" />
-
-                            <!-- ── Layer 2: Gold ring (fully on top of rose in the overlap zone top) ── -->
-                            <circle cx="82" cy="90" r="34" fill="none" stroke="#d4af37" stroke-width="7" />
-
-                            <!-- ── Diamond gem on gold ring (at top of ring) ── -->
-                            <polygon points="82,50 87,57 82,64 77,57" fill="#f5e6a3" stroke="#c8a020"
-                                stroke-width="1.5" />
-                            <line x1="79.5" y1="54.5" x2="84" y2="53" stroke="rgba(255,255,255,0.85)"
-                                stroke-width="0.9" />
-
-                            <!-- ── Layer 3: Rose ring IN FRONT of gold at bottom (creates the interlock) ── -->
-                            <circle cx="118" cy="90" r="34" fill="none" stroke="#b76e79" stroke-width="7"
-                                clip-path="url(#roseInFront)" />
-
-                            <!-- ── Bottom ornament ── -->
-                            <line x1="70" y1="140" x2="130" y2="140" stroke="#d4af37" stroke-width="0.7"
-                                opacity="0.5" />
-                            <circle cx="89" cy="140" r="1.8" fill="#d4af37" opacity="0.65" />
-                            <circle cx="100" cy="140" r="2.5" fill="#d4af37" opacity="0.9" />
-                            <circle cx="111" cy="140" r="1.8" fill="#d4af37" opacity="0.65" />
-                        </svg>
-                    </div>
-                    <img src="assets/floral_divider.webp" alt="Ornament" class="floral-divider">
-                </div>
-            </div>
-
-            <!-- Inside Cover -->
-            <div class="my-page" data-density="hard">
-                <img src="assets/caricature_tl.webp" class="page-corner-img corner-bl" alt="Couple Drawing">
-                <div class="page-content center-content">
-                    <p class="romantic-quote" style="margin-top: 30px; font-size: 1.8rem;">
-                        "Two souls with but a single thought,<br>
-                        Two hearts that beat as one."
-                    </p>
-                </div>
-            </div>
-
-            <!-- Page 1: The Couple + Core Invitation -->
-            <div class="my-page">
                 <img src="assets/caricature_tr.webp" class="page-corner-img corner-bl" alt="">
                 <div class="page-content center-content">
                     <p class="romantic-quote" style="font-size: 1.1rem; margin-bottom: 6px; opacity: 0.75;">Together
