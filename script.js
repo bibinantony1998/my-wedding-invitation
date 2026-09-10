@@ -191,6 +191,44 @@ document.addEventListener('DOMContentLoaded', function() {
         pageFlip.flipNext();
     });
 
+    // ── Tap-to-flip on mobile ──────────────────────────────────────────────
+    // A short tap on the right half → flip forward; left half → flip back.
+    // Ignored if the touch moved more than 10px (= a swipe, not a tap).
+    if (isMobile) {
+        let tapStartX = 0;
+        let tapStartY = 0;
+        let tapStartTime = 0;
+
+        bookEl.addEventListener('touchstart', (e) => {
+            tapStartX    = e.touches[0].clientX;
+            tapStartY    = e.touches[0].clientY;
+            tapStartTime = Date.now();
+        }, { passive: true });
+
+        bookEl.addEventListener('touchend', (e) => {
+            // Ignore taps on buttons / audio toggle
+            if (e.target.closest('button, #audioToggle, #fingerIndicator, a')) return;
+
+            const dx       = Math.abs(e.changedTouches[0].clientX - tapStartX);
+            const dy       = Math.abs(e.changedTouches[0].clientY - tapStartY);
+            const duration = Date.now() - tapStartTime;
+
+            // Only treat as tap if short duration and minimal movement
+            if (duration < 300 && dx < 12 && dy < 12) {
+                const tapX      = e.changedTouches[0].clientX;
+                const bookRect  = bookEl.getBoundingClientRect();
+                const midX      = bookRect.left + bookRect.width / 2;
+
+                if (tapX > midX) {
+                    pageFlip.flipNext();
+                } else {
+                    pageFlip.flipPrev();
+                }
+            }
+        }, { passive: true });
+    }
+
+
     // 3. Ambient Particle Canvas Game
     const canvas = document.getElementById('particleCanvas');
     const ctx = canvas.getContext('2d');
