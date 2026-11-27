@@ -422,14 +422,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // 4. Countdown Timer Logic
     const countdownEl = document.getElementById('countdown');
     if (countdownEl) {
-        const weddingDate = new Date("Dec 28, 2026 14:00:00").getTime();
-        
-        const updateCountdown = () => {
-            const now = new Date().getTime();
-            const distance = weddingDate - now;
+        const weddingTimeZone = 'Asia/Kolkata';
+        const weddingTarget = typeof Temporal !== 'undefined'
+            ? Temporal.PlainDate.from('2026-12-28')
+                .toPlainDateTime('15:30:00')
+                .toZonedDateTime(weddingTimeZone)
+            : null;
+        const weddingTimestamp = new Date('2026-12-28T15:30:00+05:30').getTime();
 
-            if (distance < 0) {
-                countdownEl.innerHTML = "It's Wedding Time!";
+        const updateCountdown = () => {
+            if (weddingTarget) {
+                const now = Temporal.Now.zonedDateTimeISO(weddingTimeZone);
+                const remaining = now.until(weddingTarget, {
+                    largestUnit: 'day',
+                    smallestUnit: 'second',
+                });
+
+                if (remaining.sign <= 0) {
+                    countdownEl.textContent = "It's Wedding Time!";
+                    return;
+                }
+
+                countdownEl.textContent = `${remaining.days} days ${remaining.hours} hours ${remaining.minutes} min ${remaining.seconds} sec`;
+                return;
+            }
+
+            const distance = weddingTimestamp - Date.now();
+
+            if (distance <= 0) {
+                countdownEl.textContent = "It's Wedding Time!";
                 return;
             }
 
@@ -438,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            countdownEl.innerHTML = `${days} days ${hours} hours ${minutes} min ${seconds} sec`;
+            countdownEl.textContent = `${days} days ${hours} hours ${minutes} min ${seconds} sec`;
         };
 
         updateCountdown();

@@ -436,6 +436,29 @@ h3 { font-size: 1.4rem; margin-top: 10px; color: var(--rose); font-weight: 600; 
     box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
+.map-link-box:focus-visible,
+.family-address-link:focus-visible {
+    outline: 2px solid var(--rose);
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+.family-address-link {
+    display: inline-block;
+    padding-block: 4px;
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: rgba(183, 110, 121, 0.6);
+    text-underline-offset: 3px;
+    transition: color 0.25s ease, text-decoration-color 0.25s ease;
+}
+
+.family-address-link:hover {
+    color: var(--rose);
+    text-decoration-color: var(--rose);
+}
+
 .invitation-text {
     font-family: 'Cormorant Garamond', serif;
     text-align: center;
